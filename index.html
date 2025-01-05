@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory Trainer</title>
+    <style>
+      #two-digits-display,
+      #three-digits-display,
+      #alphabets-display,
+      #two-digits-numbersLeft,
+      #three-digits-numbersLeft,
+      #alphabetsLeft {
+        margin-bottom: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Memory Trainer</h1>
+
+    <h2>2 Digits Number Generator</h2>
+    <div id="two-digits-display">
+      Click "Generate" to get a number between 0 and 99.
+    </div>
+    <div id="two-digits-numbersLeft"></div>
+    <button onclick="generateAlphanumeric('two')">Generate</button>
+    <button onclick="resetAlphanumerics('two')">Reset</button>
+
+    <h2>3 Digits Number Generator</h2>
+    <div id="three-digits-display">
+      Click "Generate" to get a number between 0 and 999.
+    </div>
+    <div id="three-digits-numbersLeft"></div>
+    <button onclick="generateAlphanumeric('three')">Generate</button>
+    <button onclick="resetAlphanumerics('three')">Reset</button>
+
+    <h2>Alphabets Generator</h2>
+    <div id="alphabets-display">
+      Click "Generate" to get a number between A to Z.
+    </div>
+    <div id="alphabetsLeft"></div>
+    <button onclick="generateAlphanumeric('alphabets')">Generate</button>
+    <button onclick="resetAlphanumerics('alphabets')">Reset</button>
+
+    <script>
+      const hundredNumbers = Array.from({ length: 100 }, (_, i) => i);
+      const tenNumbers = Array.from({ length: 10 }, (_, i) => i);
+      const alphabets = Array.from({ length: 26 }, (_, i) =>
+        String.fromCharCode(65 + i)
+      );
+      let availableHundredNumbers = [...hundredNumbers];
+      let availableHundredNumbersForThreeDigits = [...hundredNumbers];
+      let availableTenNumbers = [...tenNumbers];
+      let availableAlphabets = [...alphabets];
+
+      function generateAlphanumeric(option) {
+        if (option === "two") {
+          if (availableHundredNumbers.length === 0) {
+            document.getElementById("two-digits-display").innerText =
+              "All numbers have been generated! Click Reset to start again.";
+            return;
+          }
+
+          const randomIndex = Math.floor(
+            Math.random() * availableHundredNumbers.length
+          );
+          const number = availableHundredNumbers.splice(randomIndex, 1)[0];
+          document.getElementById(
+            "two-digits-display"
+          ).innerText = `Generated Number: ${number}`;
+          document.getElementById(
+            "two-digits-numbersLeft"
+          ).innerText = `${availableHundredNumbers.length} number(s) left`;
+        } else if (option === "three") {
+          if (availableHundredNumbersForThreeDigits.length === 0) {
+            document.getElementById("three-digits-display").innerText =
+              "All numbers have been generated! Click Reset to start again.";
+            return;
+          }
+
+          const randomIndexOfTwoDigits = Math.floor(
+            Math.random() * availableHundredNumbersForThreeDigits.length
+          );
+          const twoDigitsNumber = availableHundredNumbersForThreeDigits.splice(
+            randomIndexOfTwoDigits,
+            1
+          )[0];
+          const randomIndexOfOneDigit = Math.floor(
+            Math.random() * availableTenNumbers.length
+          );
+          const oneDigitNumber = availableTenNumbers[randomIndexOfOneDigit];
+          console.log(twoDigitsNumber);
+
+          document.getElementById(
+            "three-digits-display"
+          ).innerText = `Generated Number: ${oneDigitNumber}${
+            twoDigitsNumber.toString().length === 1
+              ? `0${twoDigitsNumber}`
+              : twoDigitsNumber
+          }`;
+          document.getElementById(
+            "three-digits-numbersLeft"
+          ).innerText = `${availableHundredNumbersForThreeDigits.length} number(s) left`;
+        } else if (option === "alphabets") {
+          if (availableAlphabets.length === 0) {
+            document.getElementById("alphabets-display").innerText =
+              "All alphabets have been generated! Click Reset to start again.";
+            return;
+          }
+
+          const randomIndex = Math.floor(
+            Math.random() * availableAlphabets.length
+          );
+          const singleAlphabet = availableAlphabets.splice(randomIndex, 1)[0];
+          document.getElementById(
+            "alphabets-display"
+          ).innerText = `Generated alphabet: ${singleAlphabet}`;
+          document.getElementById(
+            "alphabetsLeft"
+          ).innerText = `${availableAlphabets.length} alphabet(s) left`;
+        }
+      }
+
+      function resetAlphanumerics(option) {
+        if (option === "two") {
+          availableHundredNumbers = [...hundredNumbers];
+          document.getElementById("two-digits-display").innerText =
+            "Numbers have been reset. Click Generate to start again.";
+          document.getElementById("two-digits-numbersLeft").innerText = "";
+        } else if (option === "three") {
+          availableHundredNumbersForThreeDigits = [...hundredNumbers];
+          document.getElementById("three-digits-display").innerText =
+            "Numbers have been reset. Click Generate to start again.";
+          document.getElementById("three-digits-numbersLeft").innerText = "";
+        } else if (option === "alphabets") {
+          availableAlphabets = [...alphabets];
+          document.getElementById("alphabets-display").innerText =
+            "Alphabets have been reset. Click Generate to start again.";
+          document.getElementById("alphabetsLeft").innerText = "";
+        }
+      }
+    </script>
+  </body>
+</html>
