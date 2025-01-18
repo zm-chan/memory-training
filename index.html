@@ -6,11 +6,15 @@
     <title>Memory Trainer</title>
     <style>
       #two-digits-display,
-      #three-digits-display,
+      #four-digits-display,
+      #six-digits-display,
       #alphabets-display,
+      #poker-display,
       #two-digits-numbersLeft,
-      #three-digits-numbersLeft,
-      #alphabetsLeft {
+      #four-digits-numbersLeft,
+      #six-digits-numbersLeft,
+      #alphabetsLeft,
+      #pokerLeft {
         margin-bottom: 24px;
       }
     </style>
@@ -26,13 +30,21 @@
     <button onclick="generateAlphanumeric('two')">Generate</button>
     <button onclick="resetAlphanumerics('two')">Reset</button>
 
-    <h2>3 Digits Number Generator</h2>
-    <div id="three-digits-display">
-      Click "Generate" to get a number between 0 and 999.
+    <h2>4 Digits Number Generator</h2>
+    <div id="four-digits-display">
+      Click "Generate" to get a number between 0000 and 9999.
     </div>
-    <div id="three-digits-numbersLeft"></div>
-    <button onclick="generateAlphanumeric('three')">Generate</button>
-    <button onclick="resetAlphanumerics('three')">Reset</button>
+    <div id="four-digits-numbersLeft"></div>
+    <button onclick="generateAlphanumeric('four')">Generate</button>
+    <button onclick="resetAlphanumerics('four')">Reset</button>
+
+    <h2>6 Digits Number Generator</h2>
+    <div id="six-digits-display">
+      Click "Generate" to get a number between 000000 and 999999.
+    </div>
+    <div id="six-digits-numbersLeft"></div>
+    <button onclick="generateAlphanumeric('six')">Generate</button>
+    <button onclick="resetAlphanumerics('six')">Reset</button>
 
     <h2>Alphabets Generator</h2>
     <div id="alphabets-display">
@@ -42,6 +54,12 @@
     <button onclick="generateAlphanumeric('alphabets')">Generate</button>
     <button onclick="resetAlphanumerics('alphabets')">Reset</button>
 
+    <h2>Poker Generator</h2>
+    <div id="poker-display">Click "Generate" to get a card.</div>
+    <div id="pokerLeft"></div>
+    <button onclick="generateAlphanumeric('poker')">Generate</button>
+    <button onclick="resetAlphanumerics('poker')">Reset</button>
+
     <script>
       const hundredNumbers = Array.from({ length: 100 }, (_, i) => i);
       const tenNumbers = Array.from({ length: 10 }, (_, i) => i);
@@ -49,9 +67,25 @@
         String.fromCharCode(65 + i)
       );
       let availableHundredNumbers = [...hundredNumbers];
-      let availableHundredNumbersForThreeDigits = [...hundredNumbers];
-      let availableTenNumbers = [...tenNumbers];
+      let counterForFourDigits = 10;
+      let counterForSixDigits = 10;
+      let counterForPoker = 10;
       let availableAlphabets = [...alphabets];
+      const pokerShapes = ["♠️", "♥️", "♣️", "♦️"];
+      const pokerNumbers = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
+
+      function generateRandomPoker() {
+        const randomShape = Math.floor(Math.random() * pokerShapes.length);
+        const randomNumber = Math.floor(Math.random() * pokerNumbers.length);
+
+        return `${pokerShapes[randomShape]}${pokerNumbers[randomNumber]}`;
+      }
+
+      function generateRandomTwoDigits() {
+        const randomNumber = Math.floor(Math.random() * 100);
+
+        return randomNumber.toString().padStart(2, "0");
+      }
 
       function generateAlphanumeric(option) {
         if (option === "two") {
@@ -71,36 +105,38 @@
           document.getElementById(
             "two-digits-numbersLeft"
           ).innerText = `${availableHundredNumbers.length} number(s) left`;
-        } else if (option === "three") {
-          if (availableHundredNumbersForThreeDigits.length === 0) {
-            document.getElementById("three-digits-display").innerText =
+        } else if (option === "four") {
+          if (counterForFourDigits === 0) {
+            document.getElementById("four-digits-display").innerText =
               "All numbers have been generated! Click Reset to start again.";
             return;
           }
 
-          const randomIndexOfTwoDigits = Math.floor(
-            Math.random() * availableHundredNumbersForThreeDigits.length
-          );
-          const twoDigitsNumber = availableHundredNumbersForThreeDigits.splice(
-            randomIndexOfTwoDigits,
-            1
-          )[0];
-          const randomIndexOfOneDigit = Math.floor(
-            Math.random() * availableTenNumbers.length
-          );
-          const oneDigitNumber = availableTenNumbers[randomIndexOfOneDigit];
-          console.log(twoDigitsNumber);
+          document.getElementById(
+            "four-digits-display"
+          ).innerText = `Generated Number: ${generateRandomTwoDigits()}${generateRandomTwoDigits()}`;
+
+          counterForFourDigits--;
 
           document.getElementById(
-            "three-digits-display"
-          ).innerText = `Generated Number: ${oneDigitNumber}${
-            twoDigitsNumber.toString().length === 1
-              ? `0${twoDigitsNumber}`
-              : twoDigitsNumber
-          }`;
+            "four-digits-numbersLeft"
+          ).innerText = `${counterForFourDigits} number(s) left`;
+        } else if (option === "six") {
+          if (counterForSixDigits === 0) {
+            document.getElementById("six-digits-display").innerText =
+              "All numbers have been generated! Click Reset to start again.";
+            return;
+          }
+
           document.getElementById(
-            "three-digits-numbersLeft"
-          ).innerText = `${availableHundredNumbersForThreeDigits.length} number(s) left`;
+            "six-digits-display"
+          ).innerText = `Generated Number: ${generateRandomTwoDigits()}${generateRandomTwoDigits()}${generateRandomTwoDigits()}`;
+
+          counterForSixDigits--;
+
+          document.getElementById(
+            "six-digits-numbersLeft"
+          ).innerText = `${counterForSixDigits} number(s) left`;
         } else if (option === "alphabets") {
           if (availableAlphabets.length === 0) {
             document.getElementById("alphabets-display").innerText =
@@ -118,6 +154,22 @@
           document.getElementById(
             "alphabetsLeft"
           ).innerText = `${availableAlphabets.length} alphabet(s) left`;
+        } else if (option === "poker") {
+          if (counterForPoker === 0) {
+            document.getElementById("poker-display").innerText =
+              "All poker cards have been generated! Click Reset to start again.";
+            return;
+          }
+
+          document.getElementById(
+            "poker-display"
+          ).innerText = `Generated Poker Card: ${generateRandomPoker()}`;
+
+          counterForPoker--;
+
+          document.getElementById(
+            "pokerLeft"
+          ).innerText = `${counterForPoker} card(s) left`;
         }
       }
 
@@ -127,16 +179,26 @@
           document.getElementById("two-digits-display").innerText =
             "Numbers have been reset. Click Generate to start again.";
           document.getElementById("two-digits-numbersLeft").innerText = "";
-        } else if (option === "three") {
-          availableHundredNumbersForThreeDigits = [...hundredNumbers];
-          document.getElementById("three-digits-display").innerText =
+        } else if (option === "four") {
+          counterForFourDigits = 10;
+          document.getElementById("four-digits-display").innerText =
             "Numbers have been reset. Click Generate to start again.";
-          document.getElementById("three-digits-numbersLeft").innerText = "";
+          document.getElementById("four-digits-numbersLeft").innerText = "";
+        } else if (option === "six") {
+          counterForSixDigits = 10;
+          document.getElementById("six-digits-display").innerText =
+            "Numbers have been reset. Click Generate to start again.";
+          document.getElementById("six-digits-numbersLeft").innerText = "";
         } else if (option === "alphabets") {
           availableAlphabets = [...alphabets];
           document.getElementById("alphabets-display").innerText =
             "Alphabets have been reset. Click Generate to start again.";
           document.getElementById("alphabetsLeft").innerText = "";
+        } else if (option === "poker") {
+          counterForPoker = 10;
+          document.getElementById("poker-display").innerText =
+            "Cards have been reset. Click Generate to start again.";
+          document.getElementById("pokerLeft").innerText = "";
         }
       }
     </script>
