@@ -12,11 +12,13 @@
       #two-digits-display,
       #four-digits-display,
       #six-digits-display,
+      #eight-digits-display,
       #alphabets-display,
       #poker-display,
       #two-digits-numbersLeft,
       #four-digits-numbersLeft,
       #six-digits-numbersLeft,
+      #eight-digits-numbersLeft,
       #alphabetsLeft,
       #pokerLeft {
         margin-bottom: 24px;
@@ -50,6 +52,14 @@
     <button onclick="generateAlphanumeric('six')">Generate</button>
     <button onclick="resetAlphanumerics('six')">Reset</button>
 
+    <h2>8 Digits Number Generator</h2>
+    <div id="eight-digits-display">
+      Click "Generate" to get a number between 00000000 and 99999999.
+    </div>
+    <div id="eight-digits-numbersLeft"></div>
+    <button onclick="generateAlphanumeric('eight')">Generate</button>
+    <button onclick="resetAlphanumerics('eight')">Reset</button>
+
     <h2>Alphabets Generator</h2>
     <div id="alphabets-display">
       Click "Generate" to get a number between A to Z.
@@ -73,6 +83,7 @@
       let availableHundredNumbers = [...hundredNumbers];
       let counterForFourDigits = 10;
       let counterForSixDigits = 10;
+      let counterForEightDigits = 10;
       let counterForPoker = 10;
       let availableAlphabets = [...alphabets];
       const pokerShapes = ["♠️", "♥️", "♣️", "♦️"];
@@ -141,6 +152,22 @@
           document.getElementById(
             "six-digits-numbersLeft"
           ).innerText = `${counterForSixDigits} number(s) left`;
+        } else if (option === "eight") {
+          if (counterForEightDigits === 0) {
+            document.getElementById("eight-digits-display").innerText =
+              "All numbers have been generated! Click Reset to start again.";
+            return;
+          }
+
+          document.getElementById(
+            "eight-digits-display"
+          ).innerText = `Generated Number: ${generateRandomTwoDigits()}${generateRandomTwoDigits()}${generateRandomTwoDigits()}${generateRandomTwoDigits()}`;
+
+          counterForEightDigits--;
+
+          document.getElementById(
+            "eight-digits-numbersLeft"
+          ).innerText = `${counterForEightDigits} number(s) left`;
         } else if (option === "alphabets") {
           if (availableAlphabets.length === 0) {
             document.getElementById("alphabets-display").innerText =
@@ -193,6 +220,11 @@
           document.getElementById("six-digits-display").innerText =
             "Numbers have been reset. Click Generate to start again.";
           document.getElementById("six-digits-numbersLeft").innerText = "";
+        } else if (option === "eight") {
+          counterForEightDigits = 10;
+          document.getElementById("eight-digits-display").innerText =
+            "Numbers have been reset. Click Generate to start again.";
+          document.getElementById("eight-digits-numbersLeft").innerText = "";
         } else if (option === "alphabets") {
           availableAlphabets = [...alphabets];
           document.getElementById("alphabets-display").innerText =
